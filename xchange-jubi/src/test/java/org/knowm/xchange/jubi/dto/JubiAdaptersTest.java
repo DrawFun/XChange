@@ -1,18 +1,18 @@
 package org.knowm.xchange.jubi.dto;
 
-import static org.fest.assertions.api.Assertions.assertThat;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Test;
+import org.knowm.xchange.currency.CurrencyPair;
+import org.knowm.xchange.dto.marketdata.Ticker;
+import org.knowm.xchange.jubi.JubiAdapters;
+import org.knowm.xchange.jubi.dto.account.JubiBalance;
+import org.knowm.xchange.jubi.dto.marketdata.JubiTicker;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 
-import org.junit.Test;
-import org.knowm.xchange.currency.CurrencyPair;
-import org.knowm.xchange.dto.marketdata.Ticker;
-import org.knowm.xchange.jubi.JubiAdapters;
-import org.knowm.xchange.jubi.dto.marketdata.JubiTicker;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static org.fest.assertions.api.Assertions.assertThat;
 
 /**
  * Created by Yingzhe on 3/17/2015.
@@ -37,5 +37,15 @@ public class JubiAdaptersTest {
     assertThat(ticker.getVolume()).isEqualTo(new BigDecimal("16757.359"));
     assertThat(ticker.getHigh().toString()).isEqualTo("1836.55");
     assertThat(ticker.getLow().toString()).isEqualTo("1776");
+  }
+
+  @Test
+  public void testBalanceAdapter() throws IOException {
+    // Read in the JSON from the example resources
+    InputStream is = JubiAdaptersTest.class.getResourceAsStream("/example-balance-data.json");
+    //Use Jackson to parse it
+    ObjectMapper mapper = new ObjectMapper();
+    JubiBalance jubiBalance = mapper.readValue(is, JubiBalance.class);
+    System.out.println(jubiBalance);
   }
 }
