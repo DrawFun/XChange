@@ -17,6 +17,6 @@ import java.io.IOException;
 public interface JubiAuthernticated {
   @POST
   @Path("balance")
-  JubiBalance getBalance(@FormParam("key") String apiKey, @FormParam("signature") ParamsDigest signature,
-                         @FormParam("nonce")SynchronizedValueFactory<Long> nonce) throws IOException;
+  JubiBalance getBalance(@FormParam("key") String apiKey, @FormParam("nonce")SynchronizedValueFactory<Long> nonce,
+                         @FormParam("signature") ParamsDigest signature) throws IOException;
 }
