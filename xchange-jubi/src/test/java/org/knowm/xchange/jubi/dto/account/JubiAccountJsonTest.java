@@ -13,7 +13,7 @@ public class JubiAccountJsonTest {
   @Test
   public void testBalanceAdapter() throws IOException {
     // Read in the JSON from the example resources
-    InputStream is = JubiAdaptersTest.class.getResourceAsStream("/example-balance-data.json");
+    InputStream is = JubiAccountJsonTest.class.getResourceAsStream("/example-balance-data.json");
     //Use Jackson to parse it
     ObjectMapper mapper = new ObjectMapper();
     JubiBalance jubiBalance = mapper.readValue(is, JubiBalance.class);
