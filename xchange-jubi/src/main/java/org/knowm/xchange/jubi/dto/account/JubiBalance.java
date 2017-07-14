@@ -1,9 +1,13 @@
 package org.knowm.xchange.jubi.dto.account;
 
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.knowm.xchange.exceptions.NotYetImplementedForExchangeException;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Dzf on 2017/7/7.
@@ -12,47 +16,75 @@ import java.math.BigDecimal;
 public class JubiBalance {
   private final BigDecimal uid;
   private final BigDecimal asset;
-  private final BigDecimal cnyBalance;
-  private final BigDecimal btcBalance;
-  private final BigDecimal cnyLock;
-  private final BigDecimal btcLock;
   private final boolean result;
   private final String code;
+  private final int mobileFlag;
+  private final int nameAuthorized;
+  private final Map<String, BigDecimal> availableFunds;
+  private final Map<String, BigDecimal> lockedFunds;
 
   public JubiBalance(@JsonProperty("uid") BigDecimal uid,
                      @JsonProperty("asset") BigDecimal asset,
-                     @JsonProperty("cny_balance") BigDecimal cnyBalance, @JsonProperty("btc_balance") BigDecimal btcBalance,
-                     @JsonProperty("cny_lock") BigDecimal cnyLock, @JsonProperty("btc_lock") BigDecimal btcLock,
-                     @JsonProperty("result") boolean result, @JsonProperty("code") String code) {
+                     @JsonProperty("result") boolean result,
+                     @JsonProperty("code") String code,
+                     @JsonProperty("moflag") int mobileFlag,
+                     @JsonProperty("nameauth") int nameAuthorized) {
     this.uid = uid;
     this.asset = asset;
-    this.cnyBalance = cnyBalance;
-    this.btcBalance = btcBalance;
-    this.cnyLock = cnyLock;
-    this.btcLock = btcLock;
     this.result = result;
     this.code = code;
+    this.mobileFlag = mobileFlag;
+    this.nameAuthorized = nameAuthorized;
+    this.availableFunds = new HashMap<>();
+    this.lockedFunds = new HashMap<>();
   }
 
-  public BigDecimal getUid() { return uid; }
+  public BigDecimal getUid() {
+    return uid;
+  }
 
-  public BigDecimal getAsset() { return asset; }
+  public BigDecimal getAsset() {
+    return asset;
+  }
 
-  public BigDecimal getCnyBalance() { return cnyBalance; }
+  public boolean isResult() {
+    return result;
+  }
 
-  public BigDecimal getBtcBalance() { return btcBalance; }
+  public String getCode() {
+    return code;
+  }
 
-  public BigDecimal getCnyLock() { return cnyLock; }
+  public int getMobileFlag() {
+    return mobileFlag;
+  }
 
-  public BigDecimal getBtcLock() { return btcLock; }
+  public int getNameAuthorized() {
+    return nameAuthorized;
+  }
 
-  public boolean isResult() { return result; }
+  public Map<String, BigDecimal> getAvailableFunds() {
+    return availableFunds;
+  }
 
-  public String getCode() { return code; }
+  public Map<String, BigDecimal> getLockedFunds() {
+    return lockedFunds;
+  }
+
+  @JsonAnySetter
+  public void set(String name, String value) throws NotYetImplementedForExchangeException {
+    if (name.endsWith("_balance")) {
+      availableFunds.put(name.substring(0, name.indexOf("_balance")), new BigDecimal(value));
+    } else if (name.endsWith("_lock")) {
+      lockedFunds.put(name.substring(0, name.indexOf("_lock")), new BigDecimal(value));
+    } else {
+      throw new NotYetImplementedForExchangeException(String.format("Unsupported balance data: %s=%s", name, value));
+    }
+  }
 
   @Override
   public String toString() {
-    return String.format("Balance{uid=%s, asset=%s, cnyBalance=%s, btcBalance=%s, cnyLock=%s, btcLock=%s, result=%b, code=%s}",
-            uid, asset, cnyBalance, btcBalance, cnyLock, btcLock, result, code);
+    return String.format("Balance{uid=%s, asset=%s, result=%b, code=%s, mobileFlag=%d, nameAuthorized=%d, availableFunds=%s, lockedFunds=%s}",
+            uid, asset, result, code, mobileFlag, nameAuthorized, availableFunds, lockedFunds);
   }
 }

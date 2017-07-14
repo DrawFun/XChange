@@ -24,7 +24,7 @@ public class JubiAccountServiceRaw extends JubiBaseService {
 
   public JubiBalance getJubiBalance() throws IOException {
     JubiBalance jubiBalance = jubiAuthernticated.getBalance(exchange.getExchangeSpecification().getApiKey(),
-                              exchange.getNonceFactory(), signatureCreator);
+            exchange.getNonceFactory(), signatureCreator);
     return jubiBalance;
   }
 }
