@@ -7,6 +7,7 @@ import org.knowm.xchange.dto.account.FundingRecord;
 import org.knowm.xchange.exceptions.ExchangeException;
 import org.knowm.xchange.exceptions.NotAvailableFromExchangeException;
 import org.knowm.xchange.exceptions.NotYetImplementedForExchangeException;
+import org.knowm.xchange.jubi.JubiAdapters;
 import org.knowm.xchange.service.account.AccountService;
 import org.knowm.xchange.service.trade.params.TradeHistoryParams;
 
@@ -24,28 +25,28 @@ public class JubiAccountService extends JubiAccountServiceRaw implements Account
 
   @Override
   public AccountInfo getAccountInfo() throws IOException {
-    return null;
+    return JubiAdapters.adaptAccountInfo(super.getJubiBalance(), exchange.getExchangeSpecification().getUserName());
   }
 
   @Override
   public String withdrawFunds(Currency currency, BigDecimal amount, String address) throws IOException {
-    return null;
+    throw new NotYetImplementedForExchangeException();
   }
 
   @Override
   public String requestDepositAddress(Currency currency, String... arguments) throws IOException {
-    return null;
+    throw new NotYetImplementedForExchangeException();
   }
 
   @Override
   public TradeHistoryParams createFundingHistoryParams() {
-    return null;
+    throw new NotYetImplementedForExchangeException();
   }
 
   @Override
   public List<FundingRecord> getFundingHistory(
           TradeHistoryParams params) throws ExchangeException, NotAvailableFromExchangeException, NotYetImplementedForExchangeException, IOException {
-    return null;
+    throw new NotYetImplementedForExchangeException();
   }
 
 }

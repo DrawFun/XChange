@@ -14,7 +14,7 @@ import java.util.Map;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class JubiBalance {
-  private final BigDecimal uid;
+  private final String uid;
   private final BigDecimal asset;
   private final boolean result;
   private final String code;
@@ -23,7 +23,7 @@ public class JubiBalance {
   private final Map<String, BigDecimal> availableFunds;
   private final Map<String, BigDecimal> lockedFunds;
 
-  public JubiBalance(@JsonProperty("uid") BigDecimal uid,
+  public JubiBalance(@JsonProperty("uid") String uid,
                      @JsonProperty("asset") BigDecimal asset,
                      @JsonProperty("result") boolean result,
                      @JsonProperty("code") String code,
@@ -39,7 +39,7 @@ public class JubiBalance {
     this.lockedFunds = new HashMap<>();
   }
 
-  public BigDecimal getUid() {
+  public String getUid() {
     return uid;
   }
 
@@ -84,7 +84,7 @@ public class JubiBalance {
 
   @Override
   public String toString() {
-    return String.format("Balance{uid=%s, asset=%s, result=%b, code=%s, mobileFlag=%d, nameAuthorized=%d, availableFunds=%s, lockedFunds=%s}",
+    return String.format("JubiBalance: {uid=%s, asset=%s, result=%b, code=%s, mobileFlag=%d, nameAuthorized=%d, availableFunds=%s, lockedFunds=%s}",
             uid, asset, result, code, mobileFlag, nameAuthorized, availableFunds, lockedFunds);
   }
 }

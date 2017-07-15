@@ -2,6 +2,9 @@ package org.knowm.xchange.jubi.dto.account;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
+import org.knowm.xchange.currency.Currency;
+import org.knowm.xchange.dto.account.AccountInfo;
+import org.knowm.xchange.jubi.JubiAdapters;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,6 +18,7 @@ import static org.fest.assertions.api.Assertions.assertThat;
  */
 
 public class JubiAccountJsonTest {
+
   @Test
   public void testBalanceAdapter() throws IOException {
     // Read in the JSON from the example resources
@@ -22,14 +26,13 @@ public class JubiAccountJsonTest {
     //Use Jackson to parse it
     ObjectMapper mapper = new ObjectMapper();
     JubiBalance jubiBalance = mapper.readValue(is, JubiBalance.class);
-    System.out.println(jubiBalance);
-    assertThat(jubiBalance.getUid()).isEqualTo(new BigDecimal("7"));
-    assertThat(jubiBalance.isResult()).isFalse();
-
+    //Balance user id
+    assertThat(jubiBalance.getUid()).isEqualTo("7");
+    //Available funds
     Map<String, BigDecimal> availableFunds = jubiBalance.getAvailableFunds();
     assertThat(availableFunds).hasSize(49);
     assertThat(availableFunds.get("cny")).isEqualTo(new BigDecimal("54.32"));
-
+    //Locked funds
     Map<String, BigDecimal> lockedFunds = jubiBalance.getLockedFunds();
     assertThat(lockedFunds).hasSize(49);
     assertThat(lockedFunds.get("doge")).isEqualTo(new BigDecimal("65.2213212"));
@@ -42,16 +45,29 @@ public class JubiAccountJsonTest {
     //Use Jackson to parse it
     ObjectMapper mapper = new ObjectMapper();
     JubiBalance jubiBalance = mapper.readValue(is, JubiBalance.class);
-    System.out.println(jubiBalance);
+    //Result and error code
     assertThat(jubiBalance.getCode()).isEqualTo("100");
     assertThat(jubiBalance.isResult()).isFalse();
-
     assertThat(jubiBalance.getUid()).isNull();
-
+    //Funds
     Map<String, BigDecimal> availableFunds = jubiBalance.getAvailableFunds();
     assertThat(availableFunds).hasSize(0);
-
     Map<String, BigDecimal> lockedFunds = jubiBalance.getLockedFunds();
     assertThat(lockedFunds).hasSize(0);
   }
+
+  @Test
+  public void testAccountInfoAdapter() throws IOException {
+    // Read in the JSON from the example resources
+    InputStream is = JubiAccountJsonTest.class.getResourceAsStream("/example-balance-data.json");
+    //Use Jackson to parse it
+    ObjectMapper mapper = new ObjectMapper();
+    JubiBalance jubiBalance = mapper.readValue(is, JubiBalance.class);
+    AccountInfo info = JubiAdapters.adaptAccountInfo(jubiBalance, null);
+    assertThat(info.getWallet()).isNotNull();
+    assertThat(info.getWallet().getId()).isEqualTo("7");
+    assertThat(info.getWallet().getBalance(new Currency("CNY")).getAvailable()).isEqualTo(new BigDecimal("54.32"));
+    assertThat(info.getWallet().getBalance(new Currency("DOGE")).getFrozen()).isEqualTo(new BigDecimal("65.2213212"));
+  }
+
 }
