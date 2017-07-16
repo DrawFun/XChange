@@ -1,7 +1,6 @@
 package org.knowm.xchange.jubi.dto.account;
 
 import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.knowm.xchange.exceptions.NotYetImplementedForExchangeException;
 
@@ -12,7 +11,6 @@ import java.util.Map;
 /**
  * Created by Dzf on 2017/7/7.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class JubiBalance {
   private final String uid;
   private final BigDecimal asset;
