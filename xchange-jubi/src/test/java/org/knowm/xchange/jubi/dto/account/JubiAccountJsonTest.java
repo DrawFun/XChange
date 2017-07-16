@@ -20,7 +20,7 @@ import static org.fest.assertions.api.Assertions.assertThat;
 public class JubiAccountJsonTest {
 
   @Test
-  public void testBalanceAdapter() throws IOException {
+  public void testJubiBalanceAdapter() throws IOException {
     // Read in the JSON from the example resources
     InputStream is = JubiAccountJsonTest.class.getResourceAsStream("/example-balance-data.json");
     //Use Jackson to parse it
@@ -39,7 +39,7 @@ public class JubiAccountJsonTest {
   }
 
   @Test
-  public void testErrorBalanceAdapter() throws IOException {
+  public void testErrorJubiBalanceAdapter() throws IOException {
     // Read in the JSON from the example resources
     InputStream is = JubiAccountJsonTest.class.getResourceAsStream("/example-balance-data_error.json");
     //Use Jackson to parse it
@@ -69,5 +69,4 @@ public class JubiAccountJsonTest {
     assertThat(info.getWallet().getBalance(new Currency("CNY")).getAvailable()).isEqualTo(new BigDecimal("54.32"));
     assertThat(info.getWallet().getBalance(new Currency("DOGE")).getFrozen()).isEqualTo(new BigDecimal("65.2213212"));
   }
-
 }
