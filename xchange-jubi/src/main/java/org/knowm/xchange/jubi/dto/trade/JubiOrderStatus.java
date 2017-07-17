@@ -28,9 +28,9 @@ public class JubiOrderStatus {
       this.avgPrice = null;
       this.order = null;
     } else {
-      this.result = new JubiTradeResult(true, 0, null);
+      this.result = new JubiTradeResult(true, 0);
       this.status = jsonNode.get("status").asText();
-      this.avgPrice = new BigDecimal(jsonNode.get("avg_price").asDouble());
+      this.avgPrice = new BigDecimal(jsonNode.get("avg_price").asText());
       this.order = mapper.convertValue(jsonNode, JubiOrder.class);
     }
   }
@@ -72,7 +72,7 @@ public class JubiOrderStatus {
   }
   @Override
   public String toString() {
-    return String.format("JubiOrderStatus{status=%s, avg_price=%s, %s}",
-            status, avgPrice, super.toString());
+    return String.format("JubiOrderStatus{result=%s, status=%s, avg_price=%s, order=%s}",
+            result, status, avgPrice, order);
   }
 }

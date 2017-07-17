@@ -31,6 +31,7 @@ public class JubiOrderJsonTest {
     f.setTimeZone(TimeZone.getTimeZone("GMT+8"));
     String dateString = f.format(jubiOrderHistroy.getOrderList()[0].getDatetime());
     assertThat(dateString).isEqualTo("2017-07-16 15:48:10");
+    System.out.println(jubiOrderHistroy);
   }
 
   @Test
@@ -60,6 +61,7 @@ public class JubiOrderJsonTest {
     f.setTimeZone(TimeZone.getTimeZone("GMT+8"));
     String dateString = f.format(jubiOrderStatus.getDatetime());
     assertThat(dateString).isEqualTo("2017-07-09 18:23:42");
+    System.out.println(jubiOrderStatus);
   }
 
   @Test

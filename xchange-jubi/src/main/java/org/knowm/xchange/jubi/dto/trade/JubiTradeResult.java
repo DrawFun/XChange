@@ -9,19 +9,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class JubiTradeResult {
   private final boolean success;
   private final int errorCode;
-  private final String id;
 
   @JsonCreator
   public JubiTradeResult(@JsonProperty("result") final boolean result,
-                         @JsonProperty("code") final int errorCode,
-                         @JsonProperty("id") final String id) {
+                         @JsonProperty("code") final int errorCode) {
     this.success = result;
     this.errorCode = errorCode;
-    this.id = id;
-  }
-
-  public String getId() {
-    return id;
   }
 
   public boolean isSuccess() {
