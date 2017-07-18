@@ -26,19 +26,19 @@ public class JubiOrderJsonTest {
     InputStream is = JubiOrderJsonTest.class.getResourceAsStream("/example-trade-list.json");
     // Use Jackson to parse it
     ObjectMapper mapper = new ObjectMapper();
-    JubiOrderHistroy jubiOrderHistroy = mapper.readValue(is, JubiOrderHistroy.class);
-    assertThat(jubiOrderHistroy.getResult().isSuccess()).isTrue();
-    assertThat(jubiOrderHistroy.getOrderList().length).isEqualTo(8);
-    assertThat(jubiOrderHistroy.getOrderList()[0].getId()).isEqualTo(new BigDecimal(6860502));
-    assertThat(jubiOrderHistroy.getOrderList()[0].getType()).isEqualTo(JubiOrderType.Buy);
-    assertThat(jubiOrderHistroy.getOrderList()[0].getAmountOriginal()).isEqualTo(new BigDecimal(2323));
-    assertThat(jubiOrderHistroy.getOrderList()[0].getAmountOutstanding()).isEqualTo(new BigDecimal(223));
-    assertThat(jubiOrderHistroy.getOrderList()[1].getType()).isEqualTo(JubiOrderType.Sell);
+    JubiOrderHistory jubiOrderHistory = mapper.readValue(is, JubiOrderHistory.class);
+    assertThat(jubiOrderHistory.getResult().isSuccess()).isTrue();
+    assertThat(jubiOrderHistory.getOrderList().length).isEqualTo(8);
+    assertThat(jubiOrderHistory.getOrderList()[0].getId()).isEqualTo(new BigDecimal(6860502));
+    assertThat(jubiOrderHistory.getOrderList()[0].getType()).isEqualTo(JubiOrderType.Buy);
+    assertThat(jubiOrderHistory.getOrderList()[0].getAmountOriginal()).isEqualTo(new BigDecimal(2323));
+    assertThat(jubiOrderHistory.getOrderList()[0].getAmountOutstanding()).isEqualTo(new BigDecimal(223));
+    assertThat(jubiOrderHistory.getOrderList()[1].getType()).isEqualTo(JubiOrderType.Sell);
     SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     f.setTimeZone(TimeZone.getTimeZone("GMT+8"));
-    String dateString = f.format(jubiOrderHistroy.getOrderList()[0].getDatetime());
+    String dateString = f.format(jubiOrderHistory.getOrderList()[0].getDatetime());
     assertThat(dateString).isEqualTo("2017-07-16 15:48:10");
-    UserTrades userTrades = JubiAdapters.adaptUserTrades(jubiOrderHistroy, new CurrencyPair("doge", "cny"));
+    UserTrades userTrades = JubiAdapters.adaptUserTrades(jubiOrderHistory, new CurrencyPair("doge", "cny"));
     System.out.println(userTrades);
     assertThat(userTrades.getlastID()).isEqualTo(6860502);
     assertThat(userTrades.getTrades().get(0).getId()).isEqualTo("1071957");
@@ -54,10 +54,10 @@ public class JubiOrderJsonTest {
     InputStream is = JubiOrderJsonTest.class.getResourceAsStream("/example-error-response.json");
     // Use Jackson to parse it
     ObjectMapper mapper = new ObjectMapper();
-    JubiOrderHistroy jubiOrderHistroy = mapper.readValue(is, JubiOrderHistroy.class);
-    assertThat(jubiOrderHistroy.getResult().isSuccess()).isFalse();
-    assertThat(jubiOrderHistroy.getResult().getErrorCode()).isEqualTo(105);
-    assertThat(jubiOrderHistroy.getOrderList()).isNull();
+    JubiOrderHistory jubiOrderHistory = mapper.readValue(is, JubiOrderHistory.class);
+    assertThat(jubiOrderHistory.getResult().isSuccess()).isFalse();
+    assertThat(jubiOrderHistory.getResult().getErrorCode()).isEqualTo(105);
+    assertThat(jubiOrderHistory.getOrderList()).isNull();
   }
 
   @Test

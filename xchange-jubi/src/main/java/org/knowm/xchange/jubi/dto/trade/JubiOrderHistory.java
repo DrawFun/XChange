@@ -8,13 +8,13 @@ import org.knowm.xchange.exceptions.NotAvailableFromExchangeException;
 /**
  * Created by Dzf on 2017/7/17.
  */
-public class JubiOrderHistroy {
+public class JubiOrderHistory {
   private final JubiTradeResult result;
   private final JubiOrder[] orderList;
   private final static ObjectMapper mapper = new ObjectMapper();
 
   @JsonCreator
-  public JubiOrderHistroy(JsonNode jsonNode) {
+  public JubiOrderHistory(JsonNode jsonNode) {
     if (jsonNode.isObject()) {
       this.orderList = null;
       this.result = mapper.convertValue(jsonNode, JubiTradeResult.class);
@@ -41,6 +41,6 @@ public class JubiOrderHistroy {
       sb.append(jubiOrder.toString() + ", ");
     }
     sb.setLength(sb.length() - 2);
-    return String.format("JubiOrderHistroy{result=%s, orders=[%s]}", result, sb.toString());
+    return String.format("JubiOrderHistory{result=%s, orders=[%s]}", result, sb.toString());
   }
 }

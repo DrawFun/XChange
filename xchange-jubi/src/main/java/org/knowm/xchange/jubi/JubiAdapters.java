@@ -15,7 +15,7 @@ import org.knowm.xchange.jubi.dto.account.JubiBalance;
 import org.knowm.xchange.jubi.dto.marketdata.JubiTicker;
 import org.knowm.xchange.jubi.dto.marketdata.JubiTrade;
 import org.knowm.xchange.jubi.dto.trade.JubiOrder;
-import org.knowm.xchange.jubi.dto.trade.JubiOrderHistroy;
+import org.knowm.xchange.jubi.dto.trade.JubiOrderHistory;
 import org.knowm.xchange.jubi.dto.trade.JubiOrderType;
 
 import java.math.BigDecimal;
@@ -80,11 +80,11 @@ public class JubiAdapters {
             null, null, null);
   }
 
-  public static UserTrades adaptUserTrades(JubiOrderHistroy jubiOrderHistroy, CurrencyPair currencyPair) {
+  public static UserTrades adaptUserTrades(JubiOrderHistory jubiOrderHistory, CurrencyPair currencyPair) {
     List<UserTrade> trades = new ArrayList<>();
-    if (jubiOrderHistroy != null && jubiOrderHistroy.getResult().isSuccess()) {
+    if (jubiOrderHistory != null && jubiOrderHistory.getResult().isSuccess()) {
       BigDecimal lastTradeId = BigDecimal.ZERO;
-      for (JubiOrder jubiOrder : jubiOrderHistroy.getOrderList()) {
+      for (JubiOrder jubiOrder : jubiOrderHistory.getOrderList()) {
         BigDecimal tradeId = jubiOrder.getId();
         if (tradeId.compareTo(lastTradeId) > 0) {
           lastTradeId = tradeId;
