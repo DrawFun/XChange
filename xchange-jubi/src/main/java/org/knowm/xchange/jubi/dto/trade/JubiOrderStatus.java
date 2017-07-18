@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -12,8 +13,8 @@ import java.util.Date;
  * Created by Dzf on 2017/7/16.
  */
 public class JubiOrderStatus {
-  @JsonProperty("status")
-  private final String status;
+  @JsonProperty("status") @JsonDeserialize(using = JubiStatusType.JubiStatusTypeDeserializer.class)
+  private final JubiStatusType status;
   @JsonProperty("avg_price")
   private final BigDecimal avgPrice;
   private final JubiTradeResult result;
@@ -29,7 +30,7 @@ public class JubiOrderStatus {
       this.order = null;
     } else {
       this.result = new JubiTradeResult(true, 0, null);
-      this.status = jsonNode.get("status").asText();
+      this.status = JubiStatusType.fromString(jsonNode.get("status").asText());
       this.avgPrice = new BigDecimal(jsonNode.get("avg_price").asText());
       this.order = mapper.convertValue(jsonNode, JubiOrder.class);
     }
@@ -39,7 +40,7 @@ public class JubiOrderStatus {
     return result;
   }
 
-  public String getStatus() {
+  public JubiStatusType getStatus() {
     return status;
   }
 

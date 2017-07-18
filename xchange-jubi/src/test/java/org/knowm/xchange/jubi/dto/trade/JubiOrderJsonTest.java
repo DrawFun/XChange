@@ -60,7 +60,7 @@ public class JubiOrderJsonTest {
     SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     assertThat(jubiOrderStatus.getResult().isSuccess()).isTrue();
     assertThat(jubiOrderStatus.getId()).isEqualTo(new BigDecimal(6730721));
-    assertThat(jubiOrderStatus.getStatus()).isEqualTo("cancelled");
+    assertThat(jubiOrderStatus.getStatus()).isEqualTo(JubiStatusType.Cancelled);
     assertThat(jubiOrderStatus.getType()).isEqualTo(JubiOrderType.Buy);
     assertThat(jubiOrderStatus.getAmountOriginal()).isEqualTo(new BigDecimal(10000));
     f.setTimeZone(TimeZone.getTimeZone("GMT+8"));
