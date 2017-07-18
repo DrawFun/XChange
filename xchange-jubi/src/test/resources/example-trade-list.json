@@ -10,7 +10,7 @@
   {
     "id": "6730721",
     "datetime": "2017-07-09 18:23:42",
-    "type": "buy",
+    "type": "sell",
     "price": 0.001,
     "amount_original": 10000,
     "amount_outstanding": 10000

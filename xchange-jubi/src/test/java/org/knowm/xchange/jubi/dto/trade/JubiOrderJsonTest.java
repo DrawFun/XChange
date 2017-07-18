@@ -25,8 +25,11 @@ public class JubiOrderJsonTest {
     JubiOrderHistroy jubiOrderHistroy = mapper.readValue(is, JubiOrderHistroy.class);
     assertThat(jubiOrderHistroy.getResult().isSuccess()).isTrue();
     assertThat(jubiOrderHistroy.getOrderList().length).isEqualTo(8);
+    assertThat(jubiOrderHistroy.getOrderList()[0].getId()).isEqualTo(new BigDecimal(6860502));
+    assertThat(jubiOrderHistroy.getOrderList()[0].getType()).isEqualTo(JubiOrderType.Buy);
     assertThat(jubiOrderHistroy.getOrderList()[0].getAmountOriginal()).isEqualTo(new BigDecimal(2323));
     assertThat(jubiOrderHistroy.getOrderList()[0].getAmountOutstanding()).isEqualTo(new BigDecimal(223));
+    assertThat(jubiOrderHistroy.getOrderList()[1].getType()).isEqualTo(JubiOrderType.Sell);
     SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     f.setTimeZone(TimeZone.getTimeZone("GMT+8"));
     String dateString = f.format(jubiOrderHistroy.getOrderList()[0].getDatetime());
@@ -56,7 +59,9 @@ public class JubiOrderJsonTest {
     //Check jubiOrderStatus
     SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     assertThat(jubiOrderStatus.getResult().isSuccess()).isTrue();
+    assertThat(jubiOrderStatus.getId()).isEqualTo(new BigDecimal(6730721));
     assertThat(jubiOrderStatus.getStatus()).isEqualTo("cancelled");
+    assertThat(jubiOrderStatus.getType()).isEqualTo(JubiOrderType.Buy);
     assertThat(jubiOrderStatus.getAmountOriginal()).isEqualTo(new BigDecimal(10000));
     f.setTimeZone(TimeZone.getTimeZone("GMT+8"));
     String dateString = f.format(jubiOrderStatus.getDatetime());

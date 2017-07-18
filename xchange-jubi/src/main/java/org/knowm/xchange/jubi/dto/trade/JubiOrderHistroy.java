@@ -20,7 +20,7 @@ public class JubiOrderHistroy {
       this.result = mapper.convertValue(jsonNode, JubiTradeResult.class);
     } else if (jsonNode.isArray()){
       this.orderList = mapper.convertValue(jsonNode, JubiOrder[].class);
-      this.result = new JubiTradeResult(true, 0);
+      this.result = new JubiTradeResult(true, 0, null);
     } else {
       throw new NotAvailableFromExchangeException();
     }
@@ -38,8 +38,9 @@ public class JubiOrderHistroy {
   public String toString() {
     StringBuffer sb = new StringBuffer();
     for (JubiOrder jubiOrder : orderList) {
-      sb.append(jubiOrder.toString() + ",");
+      sb.append(jubiOrder.toString() + ", ");
     }
+    sb.setLength(sb.length() - 2);
     return String.format("JubiOrderHistroy{result=%s, orders=[%s]}", result, sb.toString());
   }
 }

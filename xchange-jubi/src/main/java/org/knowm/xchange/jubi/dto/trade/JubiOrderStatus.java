@@ -28,7 +28,7 @@ public class JubiOrderStatus {
       this.avgPrice = null;
       this.order = null;
     } else {
-      this.result = new JubiTradeResult(true, 0);
+      this.result = new JubiTradeResult(true, 0, null);
       this.status = jsonNode.get("status").asText();
       this.avgPrice = new BigDecimal(jsonNode.get("avg_price").asText());
       this.order = mapper.convertValue(jsonNode, JubiOrder.class);
@@ -47,7 +47,7 @@ public class JubiOrderStatus {
     return avgPrice;
   }
 
-  public String getId() {
+  public BigDecimal getId() {
     return this.order != null ? this.order.getId() : null;
   }
 
@@ -55,8 +55,8 @@ public class JubiOrderStatus {
     return this.order != null ? this.order.getDatetime() : null;
   }
 
-  public int getType() {
-    return this.order != null ? this.order.getType() : -1;
+  public JubiOrderType getType() {
+    return this.order != null ? this.order.getType() : null;
   }
 
   public BigDecimal getPrice() {
