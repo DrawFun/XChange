@@ -4,12 +4,14 @@ import org.knowm.xchange.Exchange;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.jubi.JubiAuthernticated;
 import org.knowm.xchange.jubi.dto.trade.JubiOrderHistory;
+import org.knowm.xchange.jubi.dto.trade.JubiOrderStatus;
 import org.knowm.xchange.service.trade.params.orders.DefaultOpenOrdersParamCurrencyPair;
 import org.knowm.xchange.service.trade.params.orders.OpenOrdersParams;
 import si.mazi.rescu.ParamsDigest;
 import si.mazi.rescu.RestProxyFactory;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -48,6 +50,12 @@ public class JubiTradeServiceRaw extends JubiBaseService {
 
   public OpenOrdersParams createJubiOpenOrdersParams(CurrencyPair currencyPair) {
     return new DefaultOpenOrdersParamCurrencyPair(currencyPair);
+  }
+
+  public JubiOrderStatus getOrderStatus(BigDecimal orderId, CurrencyPair currencyPair) throws IOException {
+    String coinType = currencyPair != null ? currencyPair.base.getCurrencyCode().toLowerCase() : "";
+    return jubiAuthernticated.getOrderStatus(coinType, orderId, exchange.getExchangeSpecification().getApiKey(),
+            exchange.getNonceFactory(), signatureCreator);
   }
 
 }
