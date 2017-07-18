@@ -70,8 +70,8 @@ public class JubiTradeService extends JubiTradeServiceRaw implements TradeServic
     if (params instanceof TradeHistoryParamsTimeSpan) {
       startTime = ((TradeHistoryParamsTimeSpan) params).getStartTime();
     }
-    JubiOrderHistory jubiOrderHistroys = getJubiOrderHistory(currencyPair, startTime, "all");
-    return JubiAdapters.adaptUserTrades(jubiOrderHistroys, new CurrencyPair("doge", "cny"));
+    JubiOrderHistory jubiOrderHistroys = getJubiOrderHistory(currencyPair, startTime);
+    return JubiAdapters.adaptUserTrades(jubiOrderHistroys, currencyPair);
   }
 
   @Override

@@ -82,7 +82,7 @@ public class JubiAdapters {
 
   public static UserTrades adaptUserTrades(JubiOrderHistory jubiOrderHistory, CurrencyPair currencyPair) {
     List<UserTrade> trades = new ArrayList<>();
-    if (jubiOrderHistory != null && jubiOrderHistory.getResult().isSuccess()) {
+    if (currencyPair != null && jubiOrderHistory != null && jubiOrderHistory.getResult().isSuccess()) {
       BigDecimal lastTradeId = BigDecimal.ZERO;
       for (JubiOrder jubiOrder : jubiOrderHistory.getOrderList()) {
         BigDecimal tradeId = jubiOrder.getId();

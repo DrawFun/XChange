@@ -23,11 +23,11 @@ public class JubiTradeServiceRaw extends JubiBaseService {
     this.signatureCreator = JubiPostBodyDigest.createInstance(exchange.getExchangeSpecification().getSecretKey());
   }
 
-  public JubiOrderHistory getJubiOrderHistory(CurrencyPair currencyPair, Date startTime, String type) throws IOException {
+  public JubiOrderHistory getJubiOrderHistory(CurrencyPair currencyPair, Date startTime) throws IOException {
     String coinType = currencyPair != null ? currencyPair.base.getCurrencyCode().toLowerCase() : "";
     long since = startTime != null ? startTime.getTime() : 0;
     return jubiAuthernticated.getOrderHistory(coinType, exchange.getExchangeSpecification().getApiKey(),
-            exchange.getNonceFactory(), since, type, signatureCreator);
+            exchange.getNonceFactory(), since, "all", signatureCreator);
   }
 
   public JubiTradeHistoryParams createJubiTradeHistoryParams(CurrencyPair currencyPair) {
