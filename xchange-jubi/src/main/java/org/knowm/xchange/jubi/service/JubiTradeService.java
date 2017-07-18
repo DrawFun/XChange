@@ -17,6 +17,7 @@ import org.knowm.xchange.service.trade.params.TradeHistoryParamCurrencyPair;
 import org.knowm.xchange.service.trade.params.TradeHistoryParamPaging;
 import org.knowm.xchange.service.trade.params.TradeHistoryParams;
 import org.knowm.xchange.service.trade.params.TradeHistoryParamsTimeSpan;
+import org.knowm.xchange.service.trade.params.orders.OpenOrdersParamCurrencyPair;
 import org.knowm.xchange.service.trade.params.orders.OpenOrdersParams;
 
 import java.io.IOException;
@@ -39,7 +40,15 @@ public class JubiTradeService extends JubiTradeServiceRaw implements TradeServic
 
   @Override
   public OpenOrders getOpenOrders(OpenOrdersParams params) throws ExchangeException, IOException {
-    throw new NotYetImplementedForExchangeException();
+    CurrencyPair currencyPair = null;
+    if (params instanceof OpenOrdersParamCurrencyPair) {
+      currencyPair = ((OpenOrdersParamCurrencyPair) params).getCurrencyPair();
+    }
+    //A specific e-coin type(CurrencyPair) should be assigned, otherwise the request would be invalid.
+    if (null == currencyPair) {
+      throw new NotYetImplementedForExchangeException();
+    }
+    return JubiAdapters.adaptOpenOrders(getJubiOpenOrder(currencyPair), currencyPair);
   }
 
   @Override
@@ -61,7 +70,7 @@ public class JubiTradeService extends JubiTradeServiceRaw implements TradeServic
    * Required parameter types: {@link TradeHistoryParamPaging#getPageLength()}
    */
   @Override
-  public UserTrades getTradeHistory(TradeHistoryParams params) throws IOException {
+  public UserTrades getTradeHistory(TradeHistoryParams params) throws IOException, NotYetImplementedForExchangeException {
     CurrencyPair currencyPair = null;
     Date startTime = null;
     if (params instanceof TradeHistoryParamCurrencyPair) {
@@ -70,17 +79,23 @@ public class JubiTradeService extends JubiTradeServiceRaw implements TradeServic
     if (params instanceof TradeHistoryParamsTimeSpan) {
       startTime = ((TradeHistoryParamsTimeSpan) params).getStartTime();
     }
+    //A specific e-coin type(CurrencyPair) should be assigned, otherwise the request would be invalid.
+    if (null == currencyPair) {
+      throw new NotYetImplementedForExchangeException();
+    }
     JubiOrderHistory jubiOrderHistroys = getJubiOrderHistory(currencyPair, startTime);
     return JubiAdapters.adaptUserTrades(jubiOrderHistroys, currencyPair);
   }
 
   @Override
   public TradeHistoryParams createTradeHistoryParams() {
-    return new JubiTradeHistoryParams(null, new Date(0));
+    //A specific e-coin type(CurrencyPair) should be assigned, otherwise the request would be invalid.
+    throw new NotYetImplementedForExchangeException();
   }
 
   @Override
   public OpenOrdersParams createOpenOrdersParams() {
+    //A specific e-coin type(CurrencyPair) should be assigned, otherwise the request would be invalid.
     throw new NotYetImplementedForExchangeException();
   }
 

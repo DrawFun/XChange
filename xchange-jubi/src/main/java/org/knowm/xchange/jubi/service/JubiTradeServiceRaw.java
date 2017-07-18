@@ -4,6 +4,8 @@ import org.knowm.xchange.Exchange;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.jubi.JubiAuthernticated;
 import org.knowm.xchange.jubi.dto.trade.JubiOrderHistory;
+import org.knowm.xchange.service.trade.params.orders.DefaultOpenOrdersParamCurrencyPair;
+import org.knowm.xchange.service.trade.params.orders.OpenOrdersParams;
 import si.mazi.rescu.ParamsDigest;
 import si.mazi.rescu.RestProxyFactory;
 
@@ -30,6 +32,12 @@ public class JubiTradeServiceRaw extends JubiBaseService {
             exchange.getNonceFactory(), since, "all", signatureCreator);
   }
 
+  public JubiOrderHistory getJubiOpenOrder(CurrencyPair currencyPair) throws IOException {
+    String coinType = currencyPair != null ? currencyPair.base.getCurrencyCode().toLowerCase() : "";
+    return jubiAuthernticated.getOrderHistory(coinType, exchange.getExchangeSpecification().getApiKey(),
+            exchange.getNonceFactory(), 0, "open", signatureCreator);
+  }
+
   public JubiTradeHistoryParams createJubiTradeHistoryParams(CurrencyPair currencyPair) {
     return new JubiTradeHistoryParams(currencyPair, null);
   }
@@ -37,4 +45,9 @@ public class JubiTradeServiceRaw extends JubiBaseService {
   public JubiTradeHistoryParams createJubiTradeHistoryParams(CurrencyPair currencyPair, Date date) {
     return new JubiTradeHistoryParams(currencyPair, date);
   }
+
+  public OpenOrdersParams createJubiOpenOrdersParams(CurrencyPair currencyPair) {
+    return new DefaultOpenOrdersParamCurrencyPair(currencyPair);
+  }
+
 }

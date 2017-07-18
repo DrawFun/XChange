@@ -9,6 +9,8 @@ import org.knowm.xchange.dto.account.Wallet;
 import org.knowm.xchange.dto.marketdata.Ticker;
 import org.knowm.xchange.dto.marketdata.Trade;
 import org.knowm.xchange.dto.marketdata.Trades;
+import org.knowm.xchange.dto.trade.LimitOrder;
+import org.knowm.xchange.dto.trade.OpenOrders;
 import org.knowm.xchange.dto.trade.UserTrade;
 import org.knowm.xchange.dto.trade.UserTrades;
 import org.knowm.xchange.jubi.dto.account.JubiBalance;
@@ -95,5 +97,23 @@ public class JubiAdapters {
     } else {
       return new UserTrades(trades, Trades.TradeSortType.SortByID);
     }
+  }
+
+  public static LimitOrder adaptLimitOrder(JubiOrder jubiOrder, CurrencyPair currencyPair) {
+    final Order.OrderType orderType = jubiOrder.getType() == JubiOrderType.Buy ? Order.OrderType.BID : Order.OrderType.ASK;
+    final BigDecimal cumulativeAmount = jubiOrder.getAmountOriginal().subtract(jubiOrder.getAmountOutstanding());
+    return new LimitOrder(orderType, jubiOrder.getAmountOriginal(), currencyPair, jubiOrder.getId().toPlainString(),
+            jubiOrder.getDatetime(), jubiOrder.getPrice(), null, cumulativeAmount, null);
+  }
+
+  public static OpenOrders adaptOpenOrders(JubiOrderHistory jubiOrderHistory, CurrencyPair currencyPair) {
+    List<LimitOrder> limitOrders = new ArrayList<>();
+    if (currencyPair != null && jubiOrderHistory != null && jubiOrderHistory.getResult().isSuccess()) {
+      for (JubiOrder jubiOrder : jubiOrderHistory.getOrderList()) {
+        limitOrders.add(adaptLimitOrder(jubiOrder, currencyPair));
+      }
+
+    }
+    return new OpenOrders(limitOrders);
   }
 }
