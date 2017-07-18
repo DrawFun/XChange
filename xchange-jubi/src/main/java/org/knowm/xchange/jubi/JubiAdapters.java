@@ -9,9 +9,14 @@ import org.knowm.xchange.dto.account.Wallet;
 import org.knowm.xchange.dto.marketdata.Ticker;
 import org.knowm.xchange.dto.marketdata.Trade;
 import org.knowm.xchange.dto.marketdata.Trades;
+import org.knowm.xchange.dto.trade.UserTrade;
+import org.knowm.xchange.dto.trade.UserTrades;
 import org.knowm.xchange.jubi.dto.account.JubiBalance;
 import org.knowm.xchange.jubi.dto.marketdata.JubiTicker;
 import org.knowm.xchange.jubi.dto.marketdata.JubiTrade;
+import org.knowm.xchange.jubi.dto.trade.JubiOrder;
+import org.knowm.xchange.jubi.dto.trade.JubiOrderHistroy;
+import org.knowm.xchange.jubi.dto.trade.JubiOrderType;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -66,5 +71,29 @@ public class JubiAdapters {
       balances.add(new Balance(currency, null, amount, locked));
     }
     return new AccountInfo(userName, new Wallet(jubiBalance.getUid(), userName, balances));
+  }
+
+  public static UserTrade adaptUserTrade(JubiOrder jubiOrder, CurrencyPair currencyPair) {
+    final Order.OrderType orderType = jubiOrder.getType() == JubiOrderType.Buy ? Order.OrderType.BID : Order.OrderType.ASK;
+    return new UserTrade(orderType, jubiOrder.getAmountOriginal(), currencyPair,
+            jubiOrder.getPrice(), jubiOrder.getDatetime(), jubiOrder.getId().toPlainString(),
+            null, null, null);
+  }
+
+  public static UserTrades adaptUserTrades(JubiOrderHistroy jubiOrderHistroy, CurrencyPair currencyPair) {
+    List<UserTrade> trades = new ArrayList<>();
+    if (jubiOrderHistroy != null && jubiOrderHistroy.getResult().isSuccess()) {
+      BigDecimal lastTradeId = BigDecimal.ZERO;
+      for (JubiOrder jubiOrder : jubiOrderHistroy.getOrderList()) {
+        BigDecimal tradeId = jubiOrder.getId();
+        if (tradeId.compareTo(lastTradeId) > 0) {
+          lastTradeId = tradeId;
+        }
+        trades.add(adaptUserTrade(jubiOrder, currencyPair));
+      }
+      return new UserTrades(trades, lastTradeId.longValue(), Trades.TradeSortType.SortByID);
+    } else {
+      return new UserTrades(trades, Trades.TradeSortType.SortByID);
+    }
   }
 }

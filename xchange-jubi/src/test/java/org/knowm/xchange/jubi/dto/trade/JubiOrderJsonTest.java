@@ -2,6 +2,10 @@ package org.knowm.xchange.jubi.dto.trade;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
+import org.knowm.xchange.currency.CurrencyPair;
+import org.knowm.xchange.dto.Order;
+import org.knowm.xchange.dto.trade.UserTrades;
+import org.knowm.xchange.jubi.JubiAdapters;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,7 +38,14 @@ public class JubiOrderJsonTest {
     f.setTimeZone(TimeZone.getTimeZone("GMT+8"));
     String dateString = f.format(jubiOrderHistroy.getOrderList()[0].getDatetime());
     assertThat(dateString).isEqualTo("2017-07-16 15:48:10");
-    System.out.println(jubiOrderHistroy);
+    UserTrades userTrades = JubiAdapters.adaptUserTrades(jubiOrderHistroy, new CurrencyPair("doge", "cny"));
+    System.out.println(userTrades);
+    assertThat(userTrades.getlastID()).isEqualTo(6860502);
+    assertThat(userTrades.getTrades().get(0).getId()).isEqualTo("1071957");
+    assertThat(userTrades.getTrades().get(0).getType()).isEqualTo(Order.OrderType.BID);
+    assertThat(userTrades.getTrades().get(0).getTradableAmount()).isEqualTo(new BigDecimal(100000));
+    assertThat(userTrades.getTrades().get(1).getType()).isEqualTo(Order.OrderType.ASK);
+    assertThat(userTrades.getTrades().get(7).getId()).isEqualTo("6860502");
   }
 
   @Test
